@@ -1,7 +1,7 @@
 import { configDotenv } from "dotenv";
 import express from "express";
 import morgan from "morgan";
-import { connectDB } from "./config/db";
+import { connectDB } from "./config/db.js";
 const app = express();
 
 const env = configDotenv({
