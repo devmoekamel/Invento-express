@@ -17,3 +17,5 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+export default mongoose.mode("User", UserSchema);
