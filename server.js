@@ -2,6 +2,7 @@ import { configDotenv } from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import { connectDB } from "./config/db.js";
+import users from "./routes/users.js";
 const app = express();
 
 const env = configDotenv({
@@ -11,7 +12,7 @@ const env = configDotenv({
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.get("/api/v1/users",);
+app.use("/api/v1/users", users);
 
 app.listen(3000, () => {
   try {

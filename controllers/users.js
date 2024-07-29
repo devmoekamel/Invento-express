@@ -9,7 +9,7 @@ const generateToken = (id, type) => {
   });
 };
 
-const register = async (req, res) => {
+export const register = async (req, res) => {
   const { email, password, type } = req.body;
 
   if (email || password) {
