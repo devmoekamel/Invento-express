@@ -11,9 +11,7 @@ const env = configDotenv({
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.status(200).json({ success: false });
-});
+app.get("/api/v1/users",);
 
 app.listen(3000, () => {
   try {
