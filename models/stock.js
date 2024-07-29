@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const StockSchema = new mongoose.Schema({
-  userid: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -9,7 +9,7 @@ const StockSchema = new mongoose.Schema({
     type: "Number",
     default: 0,
   },
-  vegtabales: {
+  electronics: {
     type: "Number",
     default: 0,
   },
