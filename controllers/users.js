@@ -2,6 +2,7 @@ import { genSalt, hash } from "bcrypt";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+import bcrypt from "bcrypt";
 
 const generateToken = (id, type) => {
   return jwt.sign({ id, type }, process.env.JWT_SECRECT_Key, {
@@ -61,3 +62,48 @@ export const register = async (req, res) => {
     });
   }
 };
+
+
+export const login = async (req,res)=>{
+     const {email , password} = req.body ;       
+    if(!email || !password)
+    {
+      return res.status(400).json({
+        success:false,
+        error : "please provide email or password"
+      });
+    }
+    try{
+      const user =  await User.findOne({email}); 
+
+      if(!user)
+      {
+        return  res.status(400).json({
+          success:false,
+          error : "Invalid credentials"
+        });
+      }
+    const isMatch =  await bcrypt.compare(password,user.password);
+    if(!isMatch) 
+    {
+      return  res.status(400).json({
+        success:false,
+        error : "Invalid credentials"
+      });
+    }
+
+    const token  = generateToken(user._id,user.userType);
+
+    return res.status(200).json({
+      success:true,
+      Token : token
+    })
+    }catch(e)
+    {
+      res.status(400).json({
+        success:false,
+        error : "Server interal error"
+      });
+    }
+
+}
