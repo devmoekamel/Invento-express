@@ -10,24 +10,24 @@ const generateToken = (id, type) => {
 };
 
 export const register = async (req, res) => {
-  const { email, password, type } = req.body;
+  const { email, password, usertype } = req.body;
 
-  if (email || password) {
-    res.json(400).json({
+  if (!email || !password) {
+    return res.status(400).json({
       success: false,
       error: "please provide email or password",
     });
   }
 
   if (!validator.isEmail(email)) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: "please provide a valid email",
     });
   }
 
   if (!validator.isStrongPassword(password)) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: "please provide a strong password",
     });
@@ -36,19 +36,20 @@ export const register = async (req, res) => {
   try {
     const existUser = await User.findOne({ email });
     if (existUser) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         error: "user already exist",
       });
     }
-    const salt = genSalt(10);
-    const hashedPassword = hash(password, salt);
-    const newUser = await User({
+    const salt = await genSalt(10);
+    const hashedPassword = await hash(password, salt);
+    const newUser = await new User({
       email,
-      password,
-      usertype: type,
+      password: hashedPassword,
+      userType: usertype,
     }).save();
-    const Token = generateToken(newUser._id, type);
+
+    const Token = generateToken(newUser._id, newUser.userType);
     res.status(200).json({
       success: true,
       toke: Token,
@@ -56,7 +57,7 @@ export const register = async (req, res) => {
   } catch (e) {
     res.status(400).json({
       success: false,
-      error: "Server error",
+      error: e.message,
     });
   }
 };
