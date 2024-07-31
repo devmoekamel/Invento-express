@@ -4,4 +4,4 @@ const router =  Router();
 
 
 router.route("/").get().post();
-router.route("/:id").update();
+router.route("/:id").put();
