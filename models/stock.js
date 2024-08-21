@@ -1,24 +1,27 @@
 import mongoose from "mongoose";
-const StockSchema = new mongoose.Schema({
+
+const { Schema } = mongoose;
+
+const StockSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  vegtabales: {
-    type: "Number",
+  vegetables: {
+    type: Number,
     default: 0,
   },
   electronics: {
-    type: "Number",
+    type: Number,
     default: 0,
   },
   medicine: {
-    type: "Number",
+    type: Number,
     default: 0,
   },
   others: {
-    type: "Number",
+    type: Number,
     default: 0,
   },
 });
