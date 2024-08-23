@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 
-const TransactionSchema = new mongoose.Schema({
+const TransactionSchema = new Schema({
   exporter: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -22,3 +23,6 @@ const TransactionSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+
+export default mongoose.model("Transaction",TransactionSchema);

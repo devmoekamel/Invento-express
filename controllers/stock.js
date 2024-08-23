@@ -6,7 +6,7 @@ export const GetStock = async (req, res) => {
   try {
     const stock = await Stock.findOne({ userId });
     if (!stock) {
-      const newstock = new Stock({
+      const newstock = await new Stock({
         userId,
         electronics: 0,
         medicine: 0,

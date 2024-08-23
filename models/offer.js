@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+const offerTypes = ["vegetables", "electronics", "medicine", "others"];
 
 const OfferSchema = new mongoose.Schema({
   userId: {
@@ -12,9 +13,14 @@ const OfferSchema = new mongoose.Schema({
   },
   offerType: {
     type: "String",
+    enum:offerTypes,
     required: true,
   },
   offerAmout: {
+    type: "Number",
+    required: true,
+  },
+  offerPrice: {
     type: "Number",
     required: true,
   },

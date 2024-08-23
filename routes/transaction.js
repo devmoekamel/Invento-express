@@ -1,7 +1,11 @@
 import { Router } from "express";
+import { getUserTransactions } from "../controllers/transaction.js";
 
 const router =  Router();
 
 
-router.route("/").get().post();
-router.route("/:id").put().delete();
+router.route("/").get(getUserTransactions);
+
+
+
+export default router ; 
