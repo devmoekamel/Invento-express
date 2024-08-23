@@ -1,15 +1,13 @@
 import offer from "../models/offer.js";
-import offer from "../models/offer.js";
-import Offer from "../models/offer.js";
 import stock from "../models/stock.js";
-import Stock from "../models/stock.js";
+import transaction from "../models/transaction.js";
 
 export const addOffer = async (req, res) => {
   const userId = req.userid;
   const usertype = req.usertype;
   const { offerName, offerType, offerAmout, offerPrice } = req.body;
   try {
-    const stock = await Stock.findOne({ userId });
+    const stock = await stock.findOne({ userId });
     console.log("Stock Object:", stock.offerType);
     console.log("Offer Type:", offerType);
     // Check if the stock exists
@@ -25,7 +23,7 @@ export const addOffer = async (req, res) => {
         message: "not enough amount to can do the offer",
       });
     }
-    const newOffer = await new Offer({
+    const newOffer = await new offer({
       userId: userId,
       offerName: offerName,
       offerAmout: offerAmout,
@@ -68,6 +66,13 @@ export const getUserOffers = async (req, res) => {
   try {
     const offers = await offer.findOne({ userId });
 
+    if(!offers)
+    {
+      return res.status(200).json({
+        success:true,
+        offers:[]
+      })
+    }
     return res.status(200).json({
       success: true,
       offers: offers,
@@ -85,7 +90,7 @@ export const acceptOffer = async (req, res) => {
   const userId = req.userid;
 
   try {
-    const existedOffer = await Offer.findById(offerid);
+    const existedOffer = await offer.findById(offerid);
     if (!existedOffer) {
       return res.status(404).json({
         success: false,
@@ -93,7 +98,7 @@ export const acceptOffer = async (req, res) => {
       });
     }
 
-    const userStock = await Stock.findOne({ userId });
+    const userStock = await stock.findOne({ userId });
 
     const updateField = existedOffer.offerType;
     const updateAmount = existedOffer.offerAmout;
@@ -101,12 +106,17 @@ export const acceptOffer = async (req, res) => {
     const updateObject = {};
     updateObject[updateField] = userStock[updateField] + updateAmount;
 
-    const updatedStock = await Stock.findOneAndUpdate(
+    const updatedStock = await stock.findOneAndUpdate(
       { userId },
       { $set: updateObject },
       { new: true, runValidators: true }
     );
-
+    const newtransaction =  await new transaction({
+      offerId:offerid,
+      exporter:existedOffer._id,
+      importer:userId 
+    }).save();
+    await existedOffer.deleteOne();
     res.status(200).json({
       success: true,
       message: "Offer accepted and stock updated successfully",
