@@ -4,8 +4,15 @@ export const getUserTransactions = async (req, res) => {
   const userId = req.userid;
   const usertype = req.usertype;
   try {
-    const transactions = await Transaction.findOne({ userId });
-    if (!transactions) {
+    const transactions = await Transaction.find({
+      $or: [{ from: userId }, { to: userId }]
+    })
+      .populate('from')  
+      .populate('to')     
+      .populate('offerId')
+      .exec();
+
+    if (!transactions || transactions.length === 0) {
       return res.status(200).json({
         success: true,
         transactions: [],

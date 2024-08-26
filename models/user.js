@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
+const userTypes = ["seller", "buyer"];
 
 const UserSchema = new mongoose.Schema({
+  username: {
+    type: "String",
+    required: true,
+  },
   email: {
     type: "String",
     required: true,
@@ -9,9 +14,10 @@ const UserSchema = new mongoose.Schema({
     type: "String",
     required: true,
   },
-  userType: {
+  usertype: {
     type: "String",
-    required: true,
+    enum: userTypes,
+    required: false,
   },
 });
 

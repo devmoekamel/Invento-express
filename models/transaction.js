@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const TransactionSchema = new Schema({
-  exporter: {
+  from: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  importer: {
+  to: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,

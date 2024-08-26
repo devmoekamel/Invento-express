@@ -16,16 +16,16 @@ export const Authentication = (req, res, next) => {
         error: "Invalid Token",
       });
     }
-    if (!payload || !payload.id || !payload.type) {
+    if (!payload || !payload.id || !payload.username) {
       return res.status(401).json({
         success: false,
         error: "Invalid Token",
       });
     }
-    const { id, type } = payload;
+    const { id,username } = payload;
     try {
       req.userid = id;
-      req.usertype = type;
+      req.username = username;
       next();
     } catch (e) {
         res.status(500).json({

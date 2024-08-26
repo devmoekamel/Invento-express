@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-const offerTypes = ["vegetables", "electronics", "medicine", "others"];
+const offerTypes = ["Food", "Electronics", "Medicine", "Others"];
 
 const OfferSchema = new mongoose.Schema({
   userId: {

@@ -5,7 +5,7 @@ import { Authentication } from "../middleware/Authentication.js";
 const router = Router();
 
 router.use(Authentication);
-router.route("/").post(GetStock).put(updateStock);
+router.route("/").get(GetStock).put(updateStock);
 // router.route("/update").post(updateStock);
 
 export default router;

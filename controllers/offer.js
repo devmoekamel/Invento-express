@@ -7,22 +7,27 @@ export const addOffer = async (req, res) => {
   const usertype = req.usertype;
   const { offerName, offerType, offerAmout, offerPrice } = req.body;
   try {
-    const stock = await stock.findOne({ userId });
-    console.log("Stock Object:", stock.offerType);
+    const userStock = await stock.findOne({ userId });
+    console.log("Stock Object:", userStock[offerType]);
     console.log("Offer Type:", offerType);
-    // Check if the stock exists
-    if (!stock) {
-      return res.status(400).json({
-        success: false,
-        message: "Stock not found for this user.",
-      });
-    }
-    if (stock[offerType] < offerAmout) {
+
+  
+    if (userStock[offerType] < offerAmout) {
       return res.status(400).json({
         success: false,
         message: "not enough amount to can do the offer",
       });
     }
+    const updateObject = {};
+    updateObject[offerType] = userStock[offerType] - offerAmout;
+
+    const updatedStock = await stock.findOneAndUpdate(
+      { userId },
+      { $set: updateObject },
+      { new: true, runValidators: true }
+    );
+
+
     const newOffer = await new offer({
       userId: userId,
       offerName: offerName,
@@ -46,7 +51,7 @@ export const getAllOffers = async (req, res) => {
   const userId = req.userid;
 
   try {
-    const offers = await offer.find({});
+    const offers = await offer.find({}).populate('userId').exec();
 
     return res.status(200).json({
       success: true,
@@ -64,7 +69,7 @@ export const getUserOffers = async (req, res) => {
   const userId = req.userid;
 
   try {
-    const offers = await offer.findOne({ userId });
+    const offers = await offer.findOne({ userId }).populate('userId').exec();
 
     if(!offers)
     {
@@ -102,6 +107,7 @@ export const acceptOffer = async (req, res) => {
 
     const updateField = existedOffer.offerType;
     const updateAmount = existedOffer.offerAmout;
+
 
     const updateObject = {};
     updateObject[updateField] = userStock[updateField] + updateAmount;

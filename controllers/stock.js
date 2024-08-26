@@ -1,10 +1,14 @@
 import Stock from "../models/stock.js";
+import user from "../models/user.js";
 
 export const GetStock = async (req, res) => {
   const userId = req.userid;
 
   try {
     const stock = await Stock.findOne({ userId });
+    const existedUser = await user.findById(userId);
+    if(existedUser)
+    {
     if (!stock) {
       const newstock = await new Stock({
         userId,
@@ -22,6 +26,12 @@ export const GetStock = async (req, res) => {
       success: true,
       stock: stock,
     });
+  }else{
+    return res.status(200).json({
+      success: true,
+      message:"user doesn't exist",
+    });
+  }
   } catch (e) {
     res.status(400).json({
       success: false,
