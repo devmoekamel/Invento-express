@@ -27,21 +27,21 @@ app.use("/api/v1/stock", stock);
 app.use("/api/v1/offers", offers);
 app.use("/api/v1/transactions", transaction);
 const port = process.env.PORT || 3000; 
-// app.listen(port, () => {
-//   try {
-//     connectDB();
-//     console.log("server running on port 5000");
-//   } catch (e) {
-//     process.exit(1);
-//   }
-// });
-
-const handler = async (req, res) => {
+app.listen(port, () => {
   try {
-    await connectDB(); 
-    app(req, res);     
-  } catch (error) {
-    console.error('Error handling request:', error);
-    res.status(500).send('Internal Server Error');
+    connectDB();
+    console.log("server running on port 5000");
+  } catch (e) {
+    process.exit(1);
   }
-};
+});
+
+// const handler = async (req, res) => {
+//   try {
+//     await connectDB(); // Ensure the database is connected
+//     app(req, res);     // Handle the request with Express
+//   } catch (error) {
+//     console.error('Error handling request:', error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// };
