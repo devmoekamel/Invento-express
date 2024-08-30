@@ -1,11 +1,11 @@
 import { config, configDotenv } from "dotenv";
 import express from "express";
 import morgan from "morgan";
-import { connectDB } from "./config/db.js";
-import users from "./routes/users.js";
-import stock from "./routes/stock.js";
-import offers from "./routes/offers.js";
-import transaction from "./routes/transaction.js";
+import { connectDB } from "../config/db.js";
+import users from "../routes/users.js";
+import stock from "../routes/stock.js";
+import offers from "../routes/offers.js";
+import transaction from "../routes/transaction.js";
 import cors from "cors";
 
 const app = express();
@@ -26,10 +26,9 @@ app.use("/api/v1/users", users);
 app.use("/api/v1/stock", stock);
 app.use("/api/v1/offers", offers);
 app.use("/api/v1/transactions", transaction);
-app.get("/",(req,res)=>{
-  res.json({"hello":"world"}) 
-})
-const port = process.env.PORT || 3000; 
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
+const port = 3000;
 app.listen(port, () => {
   try {
     connectDB();
@@ -38,6 +37,7 @@ app.listen(port, () => {
     process.exit(1);
   }
 });
+module.exports = app;
 
 // const handler = async (req, res) => {
 //   try {
