@@ -29,15 +29,24 @@ app.use("/api/v1/transactions", transaction);
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
 const port = 3000;
-app.listen(port, () => {
-  try {
-    connectDB();
-    console.log("server running on port 3000");
-  } catch (e) {
-    process.exit(1);
-  }
-});
-// module.exports = app;
+// app.listen(port, () => {
+//   try {
+//     connectDB();
+//     console.log("server running on port 3000");
+//   } catch (e) {
+//     process.exit(1);
+//   }
+// });
+try {
+  connectDB();
+  console.log("Database connected successfully");
+} catch (e) {
+  console.error("Database connection failed:", e);
+  process.exit(1);
+}
+
+export default app;
+
 
 // const handler = async (req, res) => {
 //   try {
