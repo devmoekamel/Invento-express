@@ -11,7 +11,7 @@ export const Authentication = (req, res, next) => {
   const token = authorization.replace("Bearer ", "").trim();
   jwt.verify(token, process.env.JWT_SECRECT_Key, (err, payload) => {
     if (err) {
-      return res.satuts(401).json({
+      return res.status(401).json({
         success: false,
         error: "Invalid Token",
       });
@@ -22,16 +22,16 @@ export const Authentication = (req, res, next) => {
         error: "Invalid Token",
       });
     }
-    const { id,username } = payload;
+    const { id, username } = payload;
     try {
       req.userid = id;
       req.username = username;
       next();
     } catch (e) {
-        res.status(500).json({
-            success: false,
-            error: "Server error",
-          });
+      res.status(500).json({
+        success: false,
+        error: "Server error",
+      });
     }
   });
 };

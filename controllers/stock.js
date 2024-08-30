@@ -5,44 +5,45 @@ export const GetStock = async (req, res) => {
   const userId = req.userid;
 
   try {
-    const stock = await Stock.findOne({ userId });
+    const stock = await Stock.findOne({ userId }).populate("userId");
     const existedUser = await user.findById(userId);
-    if(existedUser)
-    {
-    if (!stock) {
-      const newstock = await new Stock({
-        userId,
-        electronics: 0,
-        medicine: 0,
-        vegetables: 0,
-        others: 0,
-      }).save();
-      return res.status(200).json({
+    if (existedUser) {
+      if (!stock) {
+        const newstock = await new Stock({
+          userId,
+          electronics: 0,
+          medicine: 0,
+          food: 0,
+          others: 0,
+        }).save();
+        const stock = await Stock.findById(newstock._id).populate("userId");
+        return res.status(200).json({
+          success: true,
+          stock: stock,
+        });
+      }
+
+      res.status(200).json({
         success: true,
-        stock: newstock,
+        stock: stock,
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        error: "user doesn't exist",
       });
     }
-    res.status(200).json({
-      success: true,
-      stock: stock,
-    });
-  }else{
-    return res.status(200).json({
-      success: true,
-      message:"user doesn't exist",
-    });
-  }
   } catch (e) {
     res.status(400).json({
       success: false,
-      message: e.message,
+      error: e.message,
     });
   }
 };
 
 export const updateStock = async (req, res) => {
   const userId = req.userid;
-  const { vegetables, electronics, medicine, others } = req.body;
+  const { food, electronics, medicine, others } = req.body;
   try {
     const stock = await Stock.findOne({ userId });
     if (!stock) {
@@ -50,9 +51,11 @@ export const updateStock = async (req, res) => {
         userId,
         electronics: electronics,
         medicine: medicine,
-        vegetables: vegetables,
+        food: food,
         others: others,
-      }).save();
+      })
+        .populate("userId")
+        .save();
       return res.status(200).json({
         success: true,
         stock: updatedStock,
@@ -60,9 +63,9 @@ export const updateStock = async (req, res) => {
     }
     const updatedStock = await Stock.findOneAndUpdate(
       { userId },
-      { vegetables, electronics, medicine, others },
+      { food, electronics, medicine, others },
       { runValidators: true, new: true }
-    );
+    ).populate("userId");
     res.status(200).json({
       success: true,
       stock: updatedStock,
@@ -70,7 +73,7 @@ export const updateStock = async (req, res) => {
   } catch (e) {
     res.status(400).json({
       success: false,
-      message: e.message,
+      error: e.message,
     });
   }
 };

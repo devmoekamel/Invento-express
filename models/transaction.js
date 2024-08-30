@@ -14,7 +14,7 @@ const TransactionSchema = new Schema({
   },
   offerId: {
     type: Schema.Types.ObjectId,
-    ref: "Offer",
+    ref: "AOffer",
     required: true,
   },
 

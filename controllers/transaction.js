@@ -3,13 +3,14 @@ import Transaction from "../models/transaction.js";
 export const getUserTransactions = async (req, res) => {
   const userId = req.userid;
   const usertype = req.usertype;
+  console.log(userId);
   try {
     const transactions = await Transaction.find({
-      $or: [{ from: userId }, { to: userId }]
+      $or: [{ from: userId }, { to: userId }],
     })
-      .populate('from')  
-      .populate('to')     
-      .populate('offerId')
+      .populate("from")
+      .populate("to")
+      .populate("offerId")
       .exec();
 
     if (!transactions || transactions.length === 0) {
@@ -25,7 +26,7 @@ export const getUserTransactions = async (req, res) => {
   } catch (e) {
     return res.status(400).json({
       success: false,
-      message: e.message,
+      error: e.message,
     });
   }
 };

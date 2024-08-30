@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 const offerTypes = ["food", "electronics", "medicine", "others"];
 
-const OfferSchema = new mongoose.Schema({
+const AOfferSchema = new mongoose.Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -30,4 +30,4 @@ const OfferSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("Offer", OfferSchema);
+export default mongoose.model("AOffer", AOfferSchema);

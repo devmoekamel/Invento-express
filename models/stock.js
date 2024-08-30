@@ -8,7 +8,7 @@ const StockSchema = new Schema({
     ref: "User",
     required: true,
   },
-  vegetables: {
+  food: {
     type: Number,
     default: 0,
   },

@@ -4,6 +4,7 @@ const userTypes = ["seller", "buyer"];
 const UserSchema = new mongoose.Schema({
   username: {
     type: "String",
+    maxLength: 27,
     required: true,
   },
   email: {

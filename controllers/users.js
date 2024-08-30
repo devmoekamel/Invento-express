@@ -51,6 +51,11 @@ export const register = async (req, res) => {
     }).save();
 
     const Token = generateToken(newUser._id, newUser.username);
+    // res.cookie("token", Token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "Strict", // Prevents CSRF attacks
+    // });
     res.status(200).json({
       success: true,
       token: Token,
@@ -64,16 +69,16 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
+  const { username, password } = req.body;
+  if (!username || !password) {
     return res.status(400).json({
       success: false,
       error: "please provide email or password",
     });
   }
   try {
-    const user = await User.findOne({ email });
-
+    const user = await User.findOne({ username });
+    console.log(user);
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -89,10 +94,14 @@ export const login = async (req, res) => {
     }
 
     const token = generateToken(user._id, user.username);
-
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "Strict", // Prevents CSRF attacks
+    // });
     return res.status(200).json({
       success: true,
-      Token: token,
+      token,
     });
   } catch (e) {
     res.status(400).json({
