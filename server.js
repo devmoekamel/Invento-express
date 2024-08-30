@@ -15,7 +15,7 @@ const env = config({
 });
 app.use(
   cors({
-    origin: "https://invento-webapp.vercel.app/",
+    // origin: "https://invento-webapp.vercel.app/",
     // origin: process.env.Front_END_URL,
   })
 );
