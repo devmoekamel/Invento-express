@@ -1,8 +1,9 @@
-import { genSalt, hash } from "bcrypt";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+
+const { genSaltSync, hashSync } = bcrypt;
 
 const generateToken = (id, username) => {
   return jwt.sign({ id, username }, process.env.JWT_SECRECT_Key, {
@@ -41,8 +42,8 @@ export const register = async (req, res) => {
         error: "user already exist",
       });
     }
-    const salt = await genSalt(10);
-    const hashedPassword = await hash(password, salt);
+    const salt = genSaltSync(10);
+    const hashedPassword = hashSync(password, salt);
     const newUser = await new User({
       username,
       email,
@@ -78,14 +79,13 @@ export const login = async (req, res) => {
   }
   try {
     const user = await User.findOne({ username });
-    console.log(user);
     if (!user) {
       return res.status(400).json({
         success: false,
         error: "Invalid credentials",
       });
     }
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    const isPasswordMatch = bcrypt.compareSync(password, user.password);
     if (!isPasswordMatch) {
       return res.status(400).json({
         success: false,
