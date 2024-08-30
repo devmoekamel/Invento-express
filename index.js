@@ -26,11 +26,14 @@ app.use("/api/v1/users", users);
 app.use("/api/v1/stock", stock);
 app.use("/api/v1/offers", offers);
 app.use("/api/v1/transactions", transaction);
+app.get("/",(req,res)=>{
+  res.json({"hello":"world"}) 
+})
 const port = process.env.PORT || 3000; 
 app.listen(port, () => {
   try {
     connectDB();
-    console.log("server running on port 5000");
+    console.log("server running on port 3000");
   } catch (e) {
     process.exit(1);
   }
